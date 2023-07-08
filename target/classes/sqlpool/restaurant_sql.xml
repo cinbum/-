@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="restaurant">
+	<resultMap id="restList" type="spring.camp.mall.restaurant.RestauRantVO">
+		<result property="rNum"	column="r_num" />
+		<result property="rType"	column="r_type" />
+		<result property="rName"	column="r_name" />
+		<result property="rAddr"	column="r_addr" />
+		<result property="rAddr2"   column="r_addr2" />
+		<result property="rPhone"	column="r_phone" />
+		<result property="rMenu"	column="r_menu" />
+		<result property="rMenu2"	column="r_menu2" />
+		<result property="rPric"	column="r_pric" />
+		<result property="rPric2"	column="r_pric2" />
+		<result property="rVisit"	column="r_visit" />
+		<result property="rGrade"	column="r_grade" />
+		<result property="rNote"	column="r_note" />
+		<result property="fileName"	column="filename" />
+		<result property="filePath"	column="filepath" />
+		
+	</resultMap>
+	<insert id="insertRestItem" useGeneratedKeys="true" keyProperty="r_num">
+		INSERT INTO restaurant 
+		(r_type, r_name, r_addr, r_addr2, r_phone, 
+		 r_menu, r_menu2, r_pric, r_pric2,
+	     r_visit, r_grade, r_note, filepath, filename)
+		VALUES
+		( #{rType}, #{rName}, #{rAddr},#{rAddr2}, #{rPhone},
+		  #{rMenu}, #{rMenu2}, #{rPric}, #{rPric2},
+          #{rVisit}, #{rGrade}, #{rNote},#{filePath}, #{fileName}
+		 )		
+	</insert>
+	
+	<select id="restlist" resultMap="restList">
+		SELECT
+			r_num, r_type, r_name, r_addr, r_addr2, 
+			r_phone, r_visit,
+			r_grade
+		FROM
+			restaurant
+	</select>
+	
+	<select id="selectRestItem" resultType="hashMap">		
+		SELECT
+			r_num, r_type, r_name, r_addr, r_addr2, 
+			r_phone, r_menu, r_menu2, r_pric, r_pric2, r_visit,
+			r_grade, r_note, filename, filepath
+		FROM
+			restaurant
+		WHERE
+			r_num = #{rNum}
+	</select>
+	
+	<update id="update">
+		UPDATE restaurant SET
+	      r_type = #{rType}, r_name = #{rName}, r_addr = #{rAddr}, r_addr2 = #{rAddr2}, r_phone = #{rPhone},
+          r_menu = #{rMenu}, r_menu2 = #{rMenu2}, r_pric = #{rPric}, r_pric2 = #{rPric2},
+          r_visit = #{rVisit}, r_grade = #{rGrade}, r_note = #{rNote}, filepath = #{filePath}, 
+          filename = #{fileName}
+		WHERE 
+			r_num = #{rNum}
+
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM restaurant WHERE r_num=#{rNum}
+	</delete>
+	
+	<select id="searchList" resultMap="restList">
+	    SELECT * FROM restaurant
+           WHERE 1 = 1
+           <if test="searchCnd == 1"> AND
+              r_name LIKE CONCAT ('%', #{searchWrd}, '%')
+           </if>
+           <if test="searchCnd == 2"> AND
+              r_type LIKE CONCAT ('%', #{searchWrd}, '%')
+            </if>
+           <if test="searchCnd == 3"> AND
+              r_grade LIKE CONCAT ('%', #{searchWrd}, '%')
+            </if>
+           LIMIT #{recordCountPerpage}, #{firstIndex}
+</select>
+
+<select id="listcnt" parameterType="hashMap"
+resultType = "hashMap">
+	    SELECT 
+           COUNT(r_num) as list_cnt
+        FROM restaurant
+         WHERE 1 = 1
+           <if test="searchCnd == 1"> AND
+              r_name LIKE CONCAT ('%', #{searchWrd}, '%')
+           </if>
+           <if test="searchCnd == 2"> AND
+              r_type LIKE CONCAT ('%', #{searchWrd}, '%')
+            </if>
+           <if test="searchCnd == 3"> AND
+              r_grade LIKE CONCAT ('%', #{searchWrd}, '%')
+            </if>
+   </select>
+
+</mapper>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="namecard">
+	<resultMap id="ncrdList" type="spring.camp.mall.namecard.NameCardVO">
+		<result property="ncrdId"	column="ncrd_id" />
+		<result property="ncrdTrgterId"	column="ncrd_trgter_id" />
+		<result property="ncrdNm"	column="nm" />
+		<result property="telNo"	column="telno" />
+		<result property="nationNo"	column="nation_no" />
+		<result property="areaNo"	column="area_no" />
+		<result property="middleTelno"	column="middle_telno" />
+		<result property="endTelno"	column="end_telno" />
+		<result property="mbtlNum"	column="mbtlnum" />
+		<result property="idntfcNo"	column="idntfc_no" />
+		<result property="middleMbtlNum"	column="middle_mbtlnum" />
+		<result property="endMbtlNum"	column="end_mbtlnum" />
+		<result property="emailAdres"	column="email_adres" />
+		<result property="cmpnyNm"	column="cmpny_nm" />
+		<result property="deptNm"	column="dept_nm" />
+		<result property="adres"	column="adres" />
+		<result property="detailAdres"	column="detail_adres" />
+		<result property="ofcpsNm"	column="ofcps_nm" />
+		<result property="clsfNm"	column="clsf_nm" />
+		<result property="extrlUserAt"	column="extrl_user_at" />
+		<result property="othbcAt"	column="othbc_at" />
+		<result property="rm"	column="rm" />
+		<result property="frstRegisterPnttm"	column="frst_regist_pnttm" />
+		<result property="frstRegisterId"	column="frst_register_id" />
+		<result property="lastUpdtPnttm"	column="last_updt_pnttm" />
+		<result property="lastUpdusrId"	column="last_updusr_id" />
+	</resultMap>
+	<insert id="insertNcrdItem" useGeneratedKeys="true" keyProperty="ncrd_id">
+		INSERT INTO comtnncrd 
+		(nm, ncrd_trgter_id, extrl_user_at, othbc_at,
+		 clsf_nm, ofcps_nm, cmpny_nm, dept_nm, email_adres,   
+		 telno, nation_no, area_no, middle_telno, end_telno, 
+		 mbtlnum, idntfc_no, middle_mbtlnum, end_mbtlnum, adres, 
+		 detail_adres, frst_register_id, frst_regist_pnttm, rm)
+		VALUES
+		( #{ncrdNm}, #{ncrdTrgterId}, #{extrlUserAt}, #{othbcAt},
+		  #{clsfNm}, #{ofcpsNm}, #{cmpnyNm}, #{deptNm}, #{emailAdres},
+		  #{telNo}, #{nationNo}, #{areaNo}, #{middleTelNo}, #{endTelNo},
+		  #{mbtlNum}, #{idntfcNo}, #{middleMbtlNum}, #{endMbtlNum}, #{adres},
+		  #{detailAdres}, #{frstRegisterId}, NOW(), #{remark}
+		 )		
+	</insert>
+	<select id="list" resultMap="ncrdList">
+		SELECT
+			ncrd_id, nm, ncrd_trgter_id, othbc_at, 
+			extrl_user_at, cmpny_nm, dept_nm, idntfc_no,
+			middle_mbtlnum, end_mbtlnum, frst_regist_pnttm,
+			frst_register_id, ofcps_nm, clsf_nm,
+			email_adres, area_no, middle_telno, end_telno
+		FROM
+			comtnncrd
+	</select>
+	<select id="selectNcrdItem" resultType="hashMap">		
+		SELECT
+			ncrd_id, nm, ncrd_trgter_id, othbc_at, 
+			extrl_user_at, cmpny_nm, dept_nm, idntfc_no,
+			middle_mbtlnum, end_mbtlnum, frst_regist_pnttm,
+			frst_register_id, ofcps_nm, clsf_nm,
+			email_adres, area_no, middle_telno, end_telno
+		FROM
+			comtnncrd
+		WHERE
+			ncrd_id = #{ncrdId}
+	</select>
+	<update id="update">
+		UPDATE comtnncrd SET
+			nm = #{ncrdNm}, extrl_user_at = #{extrlUserAt}, othbc_at = #{othbcAt},
+			clsf_nm = #{clsfNm}, ofcps_nm = #{ofcpsNm}, cmpny_nm = #{cmpnyNm}, 
+			dept_nm = #{deptNm}, email_adres = #{emailAdres}, 
+			telno = #{telNo}, nation_no = #{nationNo}, area_no = #{areaNo}, 
+			middle_telno = #{middleTelNo}, end_telno = #{endTelNo}, 
+			mbtlnum = #{mbtlNum}, idntfc_no = #{idntfcNo}, middle_mbtlnum = #{middleMbtlNum}, 
+			end_mbtlnum = #{endMbtlNum}, adres = #{adres}, 
+			detail_adres = #{detailAdres}, rm = #{remark}, 
+			last_updusr_id = #{lastUpdusrId}, last_updt_pnttm = NOW()
+		WHERE 
+			ncrd_id = #{ncrdId}
+	</update>
+	<delete id="delete">
+		DELETE FROM comtnncrd WHERE ncrd_id=#{ncrdId}
+	</delete>
+</mapper>
